@@ -1,4 +1,4 @@
-package gogetpokeapi
+package request
 
 import (
 	"encoding/json"
@@ -9,7 +9,7 @@ import (
 
 const apiurl = "https://pokeapi.co/api/v2/"
 
-func do(endpoint string, obj any) error {
+func Do(endpoint string, obj any) error {
 	cached, found := c.Get(endpoint)
 	if found && CacheSettings.UseCache {
 		return json.Unmarshal(cached.([]byte), &obj)

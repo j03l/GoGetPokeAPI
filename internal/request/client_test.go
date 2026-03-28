@@ -1,10 +1,11 @@
-package gogetpokeapi
+package request
 
 import (
 	"encoding/json"
 	"testing"
 	"time"
 
+	"github.com/j03l/GoGetPokeAPI/pkg/models"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -16,12 +17,12 @@ func TestSetCache(t *testing.T) {
 	assert.Equal(t, false, found1,
 		"Expect to not have cached data before first call.")
 
-	_ = do(endpoint, &mockResource)
+	_ = Do(endpoint, &mockResource)
 	cached2, expires2, found2 := c.GetWithExpiration(endpoint)
 	assert.Equal(t, true, found2,
 		"Expect to have cached data after first call.")
 
-	_ = do(endpoint, &mockResource)
+	_ = Do(endpoint, &mockResource)
 	var cachedData models.NamedApiResourceList
 	json.Unmarshal(cached2.([]byte), &cachedData)
 	cached3, expires3, _ := c.GetWithExpiration(endpoint)
@@ -36,7 +37,7 @@ func TestSetCache(t *testing.T) {
 func TestClearCache(t *testing.T) {
 	_, found := c.Get(endpoint)
 	if !found {
-		_ = do(endpoint, &mockResource)
+		_ = Do(endpoint, &mockResource)
 		_, found = c.Get(endpoint)
 	}
 	assert.NotEqual(t, false, found,
@@ -53,7 +54,7 @@ func TestClearCache(t *testing.T) {
 func TestCustomExpiration(t *testing.T) {
 	ClearCache()
 	defaultExpire := time.Now().Add(defaultCacheSettings.MinExpire).Minute()
-	_ = do(endpoint, &mockResource)
+	_ = Do(endpoint, &mockResource)
 	_, expires1, _ := c.GetWithExpiration(endpoint)
 	assert.Equal(t, defaultExpire, expires1.Minute(),
 		"Expect expiration time to match default setting.")
@@ -61,7 +62,7 @@ func TestCustomExpiration(t *testing.T) {
 	ClearCache()
 	CacheSettings.CustomExpire = 20
 	customExpire := time.Now().Add(CacheSettings.CustomExpire * time.Minute).Minute()
-	_ = do(endpoint, &mockResource)
+	_ = Do(endpoint, &mockResource)
 	_, expires2, _ := c.GetWithExpiration(endpoint)
 	assert.Equal(t, customExpire, expires2.Minute(),
 		"Expect expiration time to match custom setting.")
@@ -69,13 +70,13 @@ func TestCustomExpiration(t *testing.T) {
 
 func TestNoCache(t *testing.T) {
 	ClearCache()
-	_ = do(endpoint, &mockResource)
+	_ = Do(endpoint, &mockResource)
 	_, expires1, found1 := c.GetWithExpiration(endpoint)
 	assert.Equal(t, true, found1,
 		"Expect to have cached data after first call.")
 
 	CacheSettings.UseCache = false
-	_ = do(endpoint, &mockResource)
+	_ = Do(endpoint, &mockResource)
 	_, expires2, _ := c.GetWithExpiration(endpoint)
 	assert.NotEqual(t, expires1, expires2,
 		"Expect cache expiration not to match first call.")

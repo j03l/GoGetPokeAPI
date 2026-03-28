@@ -1,4 +1,4 @@
-package resources
+package gogetpokeapi
 
 import (
 	"testing"
@@ -21,7 +21,7 @@ func TestResource(t *testing.T) {
 		"pokemon-species", "stat", "type", "language",
 	}
 	for _, test := range tests {
-		result, _ := pokeapi.Resource(test)
+		result, _ := Resource(test)
 		assert.NotEqual(t, 0, len(result.Results),
 			"Expect to receive more than zero results.")
 		assert.NotEqual(t, nil, result.Results[0].URL,
@@ -30,13 +30,13 @@ func TestResource(t *testing.T) {
 }
 
 func TestResourceOffset(t *testing.T) {
-	result, _ := pokeapi.Resource("pokemon", 3)
+	result, _ := Resource("pokemon", 3)
 	assert.Equal(t, "charmander", result.Results[0].Name,
 		"Expect to receive Charmander.")
 }
 
 func TestResourceOffsetLimit(t *testing.T) {
-	result, _ := pokeapi.Resource("pokemon", 3, 3)
+	result, _ := Resource("pokemon", 3, 3)
 	assert.Equal(t, 3, len(result.Results),
 		"Expect to receive exactly three results.")
 	assert.Equal(t, "charizard", result.Results[2].Name,
@@ -44,7 +44,7 @@ func TestResourceOffsetLimit(t *testing.T) {
 }
 
 func TestSearch(t *testing.T) {
-	result, _ := pokeapi.Search("pokemon", "saur")
+	result, _ := Search("pokemon", "saur")
 	assert.Equal(t, 5, len(result.Results),
 		"Expect to receive four results.")
 	assert.Equal(t, "venusaur", result.Results[2].Name,
@@ -52,19 +52,19 @@ func TestSearch(t *testing.T) {
 }
 
 func TestSearchFail(t *testing.T) {
-	result, _ := pokeapi.Search("pokemon", "asdf")
+	result, _ := Search("pokemon", "asdf")
 	assert.Equal(t, 0, len(result.Results),
 		"Expect to receive zero results.")
 }
 
 func TestSearchStartsWith(t *testing.T) {
-	result, _ := pokeapi.Search("pokemon", "^a")
+	result, _ := Search("pokemon", "^a")
 	assert.Equal(t, 59, len(result.Results),
 		"Expect to receive four results.")
 	assert.Equal(t, "arbok", result.Results[0].Name,
 		"Expect to receive Arbok.")
 
-	result, _ = pokeapi.Search("pokemon", "^bla")
+	result, _ = Search("pokemon", "^bla")
 	assert.Equal(t, 6, len(result.Results),
 		"Expect to receive four results.")
 	assert.Equal(t, "blastoise", result.Results[0].Name,
@@ -72,11 +72,11 @@ func TestSearchStartsWith(t *testing.T) {
 }
 
 func TestSearchStartsWithFail(t *testing.T) {
-	result, _ := pokeapi.Search("pokemon", "^zzz")
+	result, _ := Search("pokemon", "^zzz")
 	assert.Equal(t, 0, len(result.Results),
 		"Expect to receive zero results.")
 
-	result, _ = pokeapi.Search("pokemon", "^asdfasdfasdfasdfasdfasdf")
+	result, _ = Search("pokemon", "^asdfasdfasdfasdfasdfasdf")
 	assert.Equal(t, 0, len(result.Results),
 		"Expect to receive zero results.")
 }

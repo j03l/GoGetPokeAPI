@@ -2,6 +2,8 @@ package locations
 
 import (
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestLocation(t *testing.T) {

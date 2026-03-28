@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/j03l/GoGetPokeAPI/internal/request"
 	"github.com/j03l/GoGetPokeAPI/pkg/models"
 )
 
@@ -11,7 +12,7 @@ import (
 func Resource(endpoint string, params ...int) (result models.NamedApiResourceList,
 	err error) {
 	offset, limit := parseParams(params)
-	err = do(fmt.Sprintf("%s?offset=%d&limit=%d", endpoint, offset, limit),
+	err = request.Do(fmt.Sprintf("%s?offset=%d&limit=%d", endpoint, offset, limit),
 		&result)
 	return
 }
@@ -19,7 +20,7 @@ func Resource(endpoint string, params ...int) (result models.NamedApiResourceLis
 // Search returns resource list, filtered by search term.
 func Search(endpoint string, search string) (result models.NamedApiResourceList,
 	err error) {
-	err = do(fmt.Sprintf("%s?offset=0&limit=9999", endpoint), &result)
+	err = request.Do(fmt.Sprintf("%s?offset=0&limit=9999", endpoint), &result)
 	result.Results = parseSearch(result.Results, search)
 	result.Count = int64(len(result.Results))
 	return
