@@ -1,0 +1,6 @@
+- Package design and encapsulation (internal/ vs pkg/)
+- Interfaces and how Go uses them idiomatically
+- Generics (Go 1.18+ type parameters)
+- Concurrency safety (mutexes, thread-safe design)
+- The composite/builder patterns for client construction
+- Testing against real infrastructure with proper separation

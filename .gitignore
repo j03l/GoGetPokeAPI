@@ -1,22 +1,28 @@
-# Binaries for programs and plugins
+# Binaries
 *.exe
 *.exe~
 *.dll
 *.so
 *.dylib
 
+# Test
+*.test
+*.out
+coverage.txt
+
 # Vendor
 vendor
-
-# Test binary, build with `go test -c`
-*.test
-
-# Coverage
-coverage.txt
-*.out
 
 # IDE
 .idea
 .vscode
 
-/schema
+# Go workspace
+go.work
+go.work.sum
+
+# Environment
+.env
+
+# Release
+dist/
